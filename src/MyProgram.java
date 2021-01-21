@@ -2,7 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MyProgram extends JFrame {
+    private JLayeredPane layeredPane;
     private TitleScreen title;
+    private GameBoard game;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -13,11 +15,18 @@ public class MyProgram extends JFrame {
 
     public MyProgram() {
         setSize(495, 475);
-        title = new TitleScreen("This is a Game", this.getContentPane());
-        //add(new Panel());
+        layeredPane = getLayeredPane();
+
+        game = new GameBoard();
+        title = new TitleScreen("This is a Game");
+
+        layeredPane.add(game, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
+        /*add(new Panel());
         title.layoutComponents(title.aPane);
         pack();
-        title.layoutComponents(title.aPane);
+        title.layoutComponents(title.aPane);*/
+        pack();
         setTitle("My Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

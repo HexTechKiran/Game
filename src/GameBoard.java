@@ -3,14 +3,14 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 
-public class Panel extends JPanel implements ActionListener {
+public class GameBoard extends JPanel implements ActionListener {
 
     private Timer timer;
     private MoveRect rect;
     private final int DELAY = 10;
     private boolean atEdge = false;
 
-    public Panel() {
+    public GameBoard() {
         initPanel();
     }
 

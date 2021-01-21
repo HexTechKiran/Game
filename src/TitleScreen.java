@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class TitleScreen {
+public class TitleScreen extends JPanel{
     private JLabel titleText;
     private JLabel upperSpacer = new JLabel("");
     private JLabel lowerSpacer = new JLabel("");
@@ -13,22 +13,20 @@ public class TitleScreen {
     private JButton start = new JButton("Start");
     private int SW;
     private int padding;
-    public Container aPane;
 
-    public TitleScreen(String title, Container pane) {
-        initTitle(title, pane);
+    public TitleScreen(String title) {
+        initTitle(title);
     }
 
-    private void initTitle(String title, Container pane) {
+    private void initTitle(String title) {
         titleText = new JLabel(title);
         titleText.setFont(new Font("a", 0, 67));
         titleText.setVisible(true);
         start.setVisible(true);
-        aPane = pane;
     }
 
-    public void layoutComponents(Container pane) {
-        pane.setLayout(new GridBagLayout());
+    public void layoutComponents() {
+        this.setLayout(new GridBagLayout());
 
         SW = (495 - Math.max(titleText.getWidth(), start.getWidth())) / 4;
         padding = (Math.max(titleText.getWidth(), start.getWidth()) - Math.max(titleText.getWidth(), start.getWidth())) / 2;
@@ -42,7 +40,7 @@ public class TitleScreen {
         usCons.gridx = 0;
         usCons.gridy = 0;
         usCons.ipady = 50;
-        pane.add(upperSpacer, usCons);
+        this.add(upperSpacer, usCons);
 
         GridBagConstraints tlsCons = new GridBagConstraints();
         tlsCons.gridwidth = 1;
@@ -50,7 +48,7 @@ public class TitleScreen {
         tlsCons.ipadx = SW;
         tlsCons.gridx = 0;
         tlsCons.gridy = 1;
-        pane.add(topLeftSpacer, tlsCons);
+        this.add(topLeftSpacer, tlsCons);
 
         GridBagConstraints tCons = new GridBagConstraints();
         tCons.gridwidth = 1;
@@ -58,7 +56,7 @@ public class TitleScreen {
         tCons.gridx = 1;
         tCons.gridy = 1;
         tCons.anchor = GridBagConstraints.PAGE_START;
-        pane.add(titleText, tCons);
+        this.add(titleText, tCons);
 
         GridBagConstraints trsCons = new GridBagConstraints();
         trsCons.gridwidth = 1;
@@ -66,7 +64,7 @@ public class TitleScreen {
         trsCons.ipadx = SW;
         trsCons.gridx = 2;
         trsCons.gridy = 1;
-        pane.add(topRightSpacer, trsCons);
+        this.add(topRightSpacer, trsCons);
 
         GridBagConstraints msCons = new GridBagConstraints();
         msCons.gridwidth = 3;
@@ -75,7 +73,7 @@ public class TitleScreen {
         msCons.ipady = 200;
         msCons.gridx = 1;
         msCons.gridy = 2;
-        pane.add(midSpacer, msCons);
+        this.add(midSpacer, msCons);
 
         GridBagConstraints blsCons = new GridBagConstraints();
         blsCons.gridwidth = 1;
@@ -83,7 +81,7 @@ public class TitleScreen {
         blsCons.ipadx = SW;
         blsCons.gridx = 0;
         blsCons.gridy = 3;
-        pane.add(bottomLeftSpacer, blsCons);
+        this.add(bottomLeftSpacer, blsCons);
 
         GridBagConstraints sCons = new GridBagConstraints();
         sCons.gridwidth = 1;
@@ -91,7 +89,7 @@ public class TitleScreen {
         sCons.gridx = 1;
         sCons.gridy = 3;
         sCons.ipadx = padding;
-        pane.add(start, sCons);
+        this.add(start, sCons);
 
         GridBagConstraints brsCons = new GridBagConstraints();
         brsCons.gridwidth = 1;
@@ -99,7 +97,7 @@ public class TitleScreen {
         brsCons.ipadx = SW;
         brsCons.gridx = 2;
         brsCons.gridy = 3;
-        pane.add(bottomRightSpacer, brsCons);
+        this.add(bottomRightSpacer, brsCons);
 
         GridBagConstraints lsCons = new GridBagConstraints();
         lsCons.gridwidth = 3;
@@ -107,6 +105,6 @@ public class TitleScreen {
         lsCons.gridx = 0;
         lsCons.gridy = 4;
         lsCons.ipady = 50;
-        pane.add(lowerSpacer, lsCons);
+        this.add(lowerSpacer, lsCons);
     }
 }
