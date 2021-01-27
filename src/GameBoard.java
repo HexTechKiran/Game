@@ -9,6 +9,7 @@ public class GameBoard extends JPanel implements ActionListener {
     private MoveRect rect;
     private final int DELAY = 10;
     private boolean atEdge = false;
+    private GameBoard board = this;
 
     public GameBoard() {
         initPanel();
@@ -25,6 +26,7 @@ public class GameBoard extends JPanel implements ActionListener {
 
         timer = new Timer(DELAY, this);
         timer.start();
+        setVisible(true);
     }
 
     public Dimension getPreferredSize() {
@@ -64,11 +66,15 @@ public class GameBoard extends JPanel implements ActionListener {
     private class TAdapter extends KeyAdapter {
 
         public void keyPressed(KeyEvent e) {
-            rect.keyPressed(e);
+            if (board.hasFocus()) {
+                rect.keyPressed(e);
+            }
         }
 
         public void keyReleased(KeyEvent e) {
-            rect.keyReleased(e);
+            if (board.hasFocus()) {
+                rect.keyReleased(e);
+            }
         }
     }
 }

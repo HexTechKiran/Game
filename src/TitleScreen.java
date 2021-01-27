@@ -1,16 +1,17 @@
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
 
-public class TitleScreen extends JPanel{
+public class TitleScreen extends JPanel implements ActionListener {
     private JLabel titleText;
-    private JLabel upperSpacer = new JLabel("");
-    private JLabel lowerSpacer = new JLabel("");
-    private JLabel topLeftSpacer = new JLabel("");
-    private JLabel topRightSpacer = new JLabel("");
-    private JLabel bottomLeftSpacer = new JLabel("");
-    private JLabel bottomRightSpacer = new JLabel("");
-    private JLabel midSpacer = new JLabel("");
-    private JButton start = new JButton("Start");
+    private final JLabel upperSpacer = new JLabel("");
+    private final JLabel lowerSpacer = new JLabel("");
+    private final JLabel topLeftSpacer = new JLabel("");
+    private final JLabel topRightSpacer = new JLabel("");
+    private final JLabel bottomLeftSpacer = new JLabel("");
+    private final JLabel bottomRightSpacer = new JLabel("");
+    private final JLabel midSpacer = new JLabel("");
+    private final JButton start = new JButton("Start");
     private int SW;
     private int padding;
 
@@ -21,8 +22,10 @@ public class TitleScreen extends JPanel{
     private void initTitle(String title) {
         titleText = new JLabel(title);
         titleText.setFont(new Font("a", 0, 67));
+        start.setActionCommand("setInvisible");
         titleText.setVisible(true);
         start.setVisible(true);
+        this.setVisible(true);
     }
 
     public void layoutComponents() {
@@ -106,5 +109,11 @@ public class TitleScreen extends JPanel{
         lsCons.gridy = 4;
         lsCons.ipady = 50;
         this.add(lowerSpacer, lsCons);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if ("setInvisible".equals(e.getActionCommand())) {
+            this.setVisible(false);
+        }
     }
 }

@@ -15,17 +15,21 @@ public class MyProgram extends JFrame {
 
     public MyProgram() {
         setSize(495, 475);
-        layeredPane = getLayeredPane();
+        layeredPane = new JLayeredPane();
+        layeredPane.setLayout(null);
+        layeredPane.setPreferredSize(new Dimension(495, 475));
+        layeredPane.setBackground(Color.lightGray);
 
         game = new GameBoard();
         title = new TitleScreen("This is a Game");
 
         layeredPane.add(game, JLayeredPane.DEFAULT_LAYER);
+        game.setBounds(0, 0, 495, 475);
         layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
-        /*add(new Panel());
-        title.layoutComponents(title.aPane);
-        pack();
-        title.layoutComponents(title.aPane);*/
+        title.setBounds(0, 0, 495, 475);
+
+        this.add(layeredPane);
+
         pack();
         setTitle("My Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
