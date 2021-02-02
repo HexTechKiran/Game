@@ -47,16 +47,10 @@ public class GameBoard extends JPanel implements ActionListener {
         g2d.draw(rect.getRectangle());
     }
 
-    public void showTitle(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-
-
-    }
-
     public void step() {
         rect.move();
 
-        repaint(rect.getX()-2, rect.getY()-2, rect.getWidth()+5, rect.getHeight()+5);
+        repaint(rect.getX()-4, rect.getY()-4, rect.getWidth()+7, rect.getHeight()+7);
     }
 
     public void actionPerformed(ActionEvent e) {

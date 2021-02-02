@@ -22,9 +22,12 @@ public class TitleScreen extends JPanel implements ActionListener {
     private void initTitle(String title) {
         titleText = new JLabel(title);
         titleText.setFont(new Font("a", 0, 67));
+        setBounds(0, 0, 495, 475);
         start.setActionCommand("setInvisible");
+        start.addActionListener(this);
         titleText.setVisible(true);
-        start.setVisible(true);
+        setForeground(Color.black);
+        layoutComponents();
         this.setVisible(true);
     }
 
@@ -111,8 +114,9 @@ public class TitleScreen extends JPanel implements ActionListener {
         this.add(lowerSpacer, lsCons);
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed (ActionEvent e){
         if ("setInvisible".equals(e.getActionCommand())) {
+            System.out.println("Button pressed");
             this.setVisible(false);
         }
     }

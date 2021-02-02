@@ -23,14 +23,17 @@ public class MyProgram extends JFrame {
         game = new GameBoard();
         title = new TitleScreen("This is a Game");
 
-        layeredPane.add(game, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(game, new Integer(0));
         game.setBounds(0, 0, 495, 475);
-        layeredPane.add(title, JLayeredPane.PALETTE_LAYER);
+        game.setOpaque(true);
+        layeredPane.add(title, new Integer(1));
         title.setBounds(0, 0, 495, 475);
+        title.setOpaque(true);
 
         this.add(layeredPane);
 
         pack();
+        setVisible(true);
         setTitle("My Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
