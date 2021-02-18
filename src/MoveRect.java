@@ -4,44 +4,102 @@ import java.awt.geom.*;
 import javax.swing.*;
 
 public class MoveRect {
-    private int x = 40;
-    private int y = 60;
+    private int x = 0;
+    private int y = 0;
+    private Point currCell;
+    private int newX;
+    private int newY;
     private int dx;
     private int dy;
     private int w;
     private int h;
     private int mapW;
     private int mapH;
+    private int spaceW;
+    private int spaceH;
+    private int[][] walls;
+    private Point[][][] wallCoords;
+    private Point[][] wallBlocks;
+    private int cellWidth;
+    private int cellHeight;
     private RoundRectangle2D rect;
 
-    public MoveRect(Dimension dim) {
-        createRectangle(10, 10, dim);
+    public MoveRect(Dimension dim, int[][] walls_, Point[][][] wallCoords_) {
         w = 10;
         h = 10;
+        walls = walls_;
+        wallCoords = wallCoords_;
+        createRectangle(10, 10, dim);
     }
 
-    public MoveRect(int width, int height, Dimension dim) {
-        createRectangle(width, height, dim);
+    public MoveRect(int width, int height, Dimension dim, int[][] walls_, Point[][][] wallCoords_) {
         w = width;
         h = height;
+        walls = walls_;
+        wallCoords = wallCoords_;
+        createRectangle(width, height, dim);
     }
 
     public void createRectangle(int width, int height, Dimension dim) {
-        RoundRectangle2D r = new RoundRectangle2D.Double(x, y, width, height, 3, 3);
         w = width;
         h = height;
         mapW = (int) dim.getWidth();
         mapH = (int) dim.getHeight();
-        rect = r;
+        x = mapW/2 - w/2;
+        y = mapH/2 - h/2;
+
+       /* cellWidth = (mapW/walls[0].length);
+        cellHeight = (mapH/walls.length);
+        currCell.x = 1 + (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
+        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;*/
+
+        rect = new RoundRectangle2D.Double(x, y, width, height, 3, 3);
     }
 
     public void move() {
-        if ((x + dx) > 1 && (x + w + dx + 2) < mapW) {
+        /*boolean[] passThrough = new boolean[]{
+                true, true, true, true
+        };*/
+        newX = x + dx;
+        newY = y + dy;
+
+        /*switch (walls[currCell.x][currCell.y]) {
+            case 0:
+                break;
+            case 1:
+                //can't pass through on right
+                passThrough[1] = false;
+                break;
+            case 2:
+                //can't pass through on bottom
+                passThrough[2] = false;
+                break;
+            case 3:
+                //can't pass through on right or bottom
+                passThrough[1] = false;
+                passThrough[2] = false;
+                break;
+        }
+
+        if (walls[currCell.x - 1][currCell.y] == 1 || walls[currCell.x - 1][currCell.y] == 3) {
+            //can't pass through on left;
+            passThrough[3] = false;
+        }
+
+        if (walls[currCell.x][currCell.y - 1] == 2 || walls[currCell.x][currCell.y - 1] == 3) {
+            //can't pass through on left;
+            passThrough[0] = false;
+        }*/
+
+        if (newX > 1 && (newX + w + 2) < mapW) {
             x += dx;
         }
-        if ((y + dy) > 1 && (y + h + dy + 2) < mapH) {
+        if (newY > 1 && (newY + h + 2) < mapH) {
             y += dy;
         }
+
+        /*currCell.x = 1 + (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
+        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;*/
 
         rect.setRoundRect(x, y, w, h, 3, 3);
     }
