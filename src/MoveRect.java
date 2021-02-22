@@ -48,22 +48,34 @@ public class MoveRect {
         x = mapW/2 - w/2;
         y = mapH/2 - h/2;
 
-       /* cellWidth = (mapW/walls[0].length);
+        cellWidth = (mapW/walls[0].length);
         cellHeight = (mapH/walls.length);
         currCell.x = 1 + (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
-        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;*/
+        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;
 
         rect = new RoundRectangle2D.Double(x, y, width, height, 3, 3);
     }
 
     public void move() {
-        /*boolean[] passThrough = new boolean[]{
+        boolean[] passThrough = new boolean[]{
                 true, true, true, true
-        };*/
+        };
+        /*
+        Values for each side of a cell works like this
+
+             _____0____
+             |        |
+             3        1
+             |____2___|
+         */
+
         newX = x + dx;
         newY = y + dy;
 
-        /*switch (walls[currCell.x][currCell.y]) {
+        currCell.x = 1 + (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
+        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;
+
+        switch (walls[currCell.x][currCell.y]) {
             case 0:
                 break;
             case 1:
@@ -89,7 +101,19 @@ public class MoveRect {
         if (walls[currCell.x][currCell.y - 1] == 2 || walls[currCell.x][currCell.y - 1] == 3) {
             //can't pass through on left;
             passThrough[0] = false;
-        }*/
+        }
+
+        if (
+                (((1 + (mapW - (mapW - ((x + dx) - ((x + dx) % cellWidth))))/cellWidth) > currCell.x) && !passThrough[1])
+                || (((1 + (mapW - (mapW - ((x + dx) - ((x + dx) % cellWidth))))/cellWidth) < currCell.x) && !passThrough[3])) {
+            return;
+        }
+
+        if (
+                (((1 + (mapH - (mapH - ((y + dy) - ((y + dy) % cellHeight))))/cellHeight) > currCell.y) && !passThrough[2])
+                || (((1 + (mapH - (mapH - ((y + dy) - ((y + dy) % cellHeight))))/cellHeight) < currCell.y) && !passThrough[0])) {
+            return;
+        }
 
         if (newX > 1 && (newX + w + 2) < mapW) {
             x += dx;
@@ -97,9 +121,6 @@ public class MoveRect {
         if (newY > 1 && (newY + h + 2) < mapH) {
             y += dy;
         }
-
-        /*currCell.x = 1 + (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
-        currCell.y = 1 + (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;*/
 
         rect.setRoundRect(x, y, w, h, 3, 3);
     }
