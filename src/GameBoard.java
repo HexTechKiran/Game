@@ -15,16 +15,16 @@ public class GameBoard extends JPanel implements ActionListener {
     private boolean atEdge = false;
     private GameBoard board = this;
     private int[][] walls = new int[][]{
-            {0, 3, 3, 0, 0, 0, 3, 3, 3, 0},
-            {0, 3, 3, 3, 3, 0, 0, 0, 0, 3},
-            {3, 3, 3, 3, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 3, 3, 3, 3},
-            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-            {3 ,0, 0, 3, 3, 3, 3, 0, 0, 0},
-            {0, 0, 3, 3, 3, 3, 3, 3, 3, 3},
-            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-            {3 ,3, 3, 3, 3, 3, 3, 3, 3, 3}
+            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 3, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 3, 0, 0, 0, 0, 0},
+            {1 ,1, 1, 1, 3, 3, 0, 0, 0, 0},
+            {0, 0, 0, 3, 0, 0, 3, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 3, 0, 0},
+            {0, 3, 0, 0, 0, 0, 0, 0, 3, 0},
+            {3 ,0, 0, 0, 0, 0, 0, 0, 0, 3}
     };
     private Point[][][] wallCoords;
 
@@ -53,7 +53,7 @@ public class GameBoard extends JPanel implements ActionListener {
         wallCoords = new Point[walls.length][walls[0].length][3];
 
         for(int i = 0; i < walls.length; i++) {
-            for(int j = 0; j < wallCoords[0].length; j++) {
+            for(int j = 0; j < walls[0].length; j++) {
                 for(int k = 0; k < 3; k++) {
                     wallCoords[i][j][k] = new Point(-1, -1);
                 }
@@ -62,19 +62,14 @@ public class GameBoard extends JPanel implements ActionListener {
     }
 
     private void generateWallCoords(int[][] walls) {
-        int currW = 0;
-        int currH = 0;
-
         spaceW = mapW / (walls[0].length);
         spaceH = mapH / (walls.length);
-        currW = spaceW;
-        currH = spaceH;
 
         for(int i = 0; i < walls.length; i++) {
             for (int j = 0; j < walls[0].length; j++) {
-                wallCoords[i][j][0] = new Point(spaceW * (i+1), spaceH * j);
-                wallCoords[i][j][1] = new Point(spaceW * (i+1), spaceH * (j+1));
-                wallCoords[i][j][2] = new Point(spaceW * i, spaceH * (j+1));
+                wallCoords[i][j][0] = new Point(spaceH * j, spaceW * (i+1));
+                wallCoords[i][j][1] = new Point(spaceH * (j+1), spaceW * (i+1));
+                wallCoords[i][j][2] = new Point(spaceH * (j+1), spaceW * i);
             }
         }
     }
@@ -107,8 +102,6 @@ public class GameBoard extends JPanel implements ActionListener {
                 Point cor = wallCoords[i][j][1];
                 Point left = wallCoords[i][j][2];
                 switch (walls[i][j]) {
-                    case 0:
-                        continue;
                     case 1:
                         g2d.drawLine(top.x, top.y, cor.x, cor.y);
                         break;
