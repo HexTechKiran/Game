@@ -67,9 +67,9 @@ public class GameBoard extends JPanel implements ActionListener {
 
         for(int i = 0; i < walls.length; i++) {
             for (int j = 0; j < walls[0].length; j++) {
-                wallCoords[i][j][0] = new Point(spaceH * j, spaceW * (i+1));
+                wallCoords[i][j][0] = new Point(spaceH * (j+1), spaceW * i);
                 wallCoords[i][j][1] = new Point(spaceH * (j+1), spaceW * (i+1));
-                wallCoords[i][j][2] = new Point(spaceH * (j+1), spaceW * i);
+                wallCoords[i][j][2] = new Point(spaceH * j, spaceW * (i+1));
             }
         }
     }
