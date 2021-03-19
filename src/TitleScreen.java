@@ -14,6 +14,8 @@ public class TitleScreen extends JPanel implements ActionListener {
     private final JButton start = new JButton("Start");
     private int SW;
     private int padding;
+    private int mapW = 500;
+    private int mapH = 500;
 
     public TitleScreen(String title) {
         initTitle(title);
@@ -22,7 +24,7 @@ public class TitleScreen extends JPanel implements ActionListener {
     private void initTitle(String title) {
         titleText = new JLabel(title);
         titleText.setFont(new Font("a", 0, 67));
-        setBounds(0, 0, 495, 475);
+        setBounds(0, 0, mapW, mapH);
         start.setActionCommand("setInvisible");
         start.addActionListener(this);
         titleText.setVisible(true);
@@ -34,7 +36,7 @@ public class TitleScreen extends JPanel implements ActionListener {
     public void layoutComponents() {
         this.setLayout(new GridBagLayout());
 
-        SW = (495 - Math.max(titleText.getWidth(), start.getWidth())) / 4;
+        SW = (mapW - Math.max(titleText.getWidth(), start.getWidth())) / 4;
         padding = (Math.max(titleText.getWidth(), start.getWidth()) - Math.max(titleText.getWidth(), start.getWidth())) / 2;
         System.out.println(titleText.getWidth());
         System.out.println(SW);

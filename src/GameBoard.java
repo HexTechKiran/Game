@@ -7,8 +7,8 @@ public class GameBoard extends JPanel implements ActionListener {
 
     private int spaceW;
     private int spaceH;
-    private int mapW = 495;
-    private int mapH = 475;
+    private int mapW = 500;
+    private int mapH = 500;
     private Timer timer;
     private MoveRect rect;
     private final int DELAY = 10;
@@ -26,6 +26,7 @@ public class GameBoard extends JPanel implements ActionListener {
             {0, 3, 0, 0, 0, 0, 0, 0, 3, 0},
             {3 ,0, 0, 0, 0, 0, 0, 0, 0, 3}
     };
+    private int[][] pixels = new int[500][500];
     private Point[][][] wallCoords;
 
     public GameBoard() {
@@ -41,8 +42,9 @@ public class GameBoard extends JPanel implements ActionListener {
 
         initWallCoords(walls);
         generateWallCoords(walls);
+        pixelWalls();
 
-        rect = new MoveRect(10, 10, getPreferredSize(), walls, wallCoords);
+        rect = new MoveRect(10, 10, getPreferredSize(), walls, pixels);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -75,7 +77,7 @@ public class GameBoard extends JPanel implements ActionListener {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(495, 475);
+        return new Dimension(mapW, mapH);
     }
 
     public void paintComponent(Graphics g) {
@@ -114,6 +116,43 @@ public class GameBoard extends JPanel implements ActionListener {
                         break;
                 }
             }
+        }
+    }
+
+    private void pixelWalls() {
+        for (int i = 0; i < walls.length; i++) {
+            for (int j = 0; j < walls[0].length; j++) {
+                Point top = wallCoords[i][j][0];
+                Point cor = wallCoords[i][j][1];
+                Point left = wallCoords[i][j][2];
+                switch (walls[i][j]) {
+                    case 1:
+                        drawPixels(top.x, top.y, cor.x, cor.y);
+                        break;
+                    case 2:
+                        drawPixels(cor.x, cor.y, left.x, left.y);
+                        break;
+                    case 3:
+                        drawPixels(top.x, top.y, cor.x, cor.y);
+                        drawPixels(cor.x, cor.y, left.x, left.y);
+                        break;
+                }
+            }
+        }
+    }
+
+    private void drawPixels(int x1, int y1, int x2, int y2) {
+        Point[] pointsBetween = new Point[5];
+
+        for (int i = x1; i <= x2; i++) {
+            pointsBetween[i-x1].x = i;
+        }
+        for (int j = y1; j <= y2; j++) {
+            pointsBetween[j-y1].y = j;
+        }
+
+        for (Point coord : pointsBetween) {
+            pixels[coord.y][coord.x] = 1;
         }
     }
 

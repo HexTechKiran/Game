@@ -18,33 +18,33 @@ public class MoveRect {
     private int spaceW;
     private int spaceH;
     private int[][] walls;
-    private Point[][][] wallCoords;
+    private int[][] pixels;
     private Point[][] wallBlocks;
     private int cellWidth;
     private int cellHeight;
     private RoundRectangle2D rect;
 
-    public MoveRect(Dimension dim, int[][] walls_, Point[][][] wallCoords_) {
+    public MoveRect(Dimension dim, int[][] walls_, int[][] pixels_) {
         w = 10;
         h = 10;
         walls = walls_;
-        wallCoords = wallCoords_;
+        pixels = pixels_;
         createRectangle(10, 10, dim);
     }
 
-    public MoveRect(int width, int height, Dimension dim, int[][] walls_, Point[][][] wallCoords_) {
+    public MoveRect(int width, int height, Dimension dim, int[][] walls_, int[][] pixels_) {
         w = width;
         h = height;
         walls = walls_;
-        wallCoords = wallCoords_;
+        pixels = pixels_;
         createRectangle(width, height, dim);
     }
 
     public void createRectangle(int width, int height, Dimension dim) {
         mapW = (int) dim.getWidth();
         mapH = (int) dim.getHeight();
-        x = mapW/2 - w/2;
-        y = mapH/2 - h/2;
+        x = 100;
+        y = 100;
 
         cellWidth = (mapW/walls[0].length);
         cellHeight = (mapH/walls.length);
@@ -54,6 +54,7 @@ public class MoveRect {
         rect = new RoundRectangle2D.Double(x, y, width, height, 3, 3);
     }
 
+    //This function is incomplete!
     public boolean[] canMove(int x_, int y_, int dx_, int dy_) {
         boolean[] canMove = new boolean[]{
                 true, true
@@ -62,14 +63,40 @@ public class MoveRect {
         newX = x_ + dx_;
         newY = y_ + dy_;
 
-        Point thisCell = new Point(
+        Point newBottomLeft = new Point(newX, newY);
+        Point newTopRight = new Point(newX + w, newY + h);
+
+        int[][] newLocationPixels = new int[10][10];
+        int curr = 0;
+
+        for (int[] list : Arrays.copyOfRange(pixels, newTopRight.y, newBottomLeft.y)) {
+            newLocationPixels[curr] = Arrays.copyOfRange(list, newBottomLeft.x, newTopRight.x);
+            curr += 1;
+        }
+
+        for (int r = 0; r < newLocationPixels.length; r++) {
+            for (int c = 0; c < newLocationPixels[0].length; c++) {
+                if (
+                        (r == 0 && 1 < c && c < (newLocationPixels.length-2))
+                        || (r == (newLocationPixels.length-1))) {
+                    if (newLocationPixels[r][c] == 1) {
+                        canMove[1] = false;
+                    }
+                }
+                else if (j > )
+            }
+        }
+
+        //The above loads the pixels in the new rectangle space into newLocationPixels, now just check for black pixels
+
+        /*Point thisCell = new Point(
                 (mapW - (mapW - (x_ - (x_ % cellWidth))))/cellWidth,
-                (mapH - (mapH - (12 + y_ - (y_ % cellHeight))))/cellHeight
+                (mapH - (mapH - (y_ - (y_ % cellHeight))))/cellHeight
         );
         int thisCellVal = walls[thisCell.y][thisCell.x];
         Point newCell = new Point(
                 (mapW - (mapW - (newX - (newX % cellWidth))))/cellWidth,
-                (mapH - (mapH - (12 + newY - (newY % cellHeight))))/cellHeight
+                (mapH - (mapH - (newY - (newY % cellHeight))))/cellHeight
         );
         int newCellVal = walls[newCell.y][newCell.x];
 
@@ -94,87 +121,52 @@ public class MoveRect {
                     canMove[0] = false;
                 }
             }
-        }
-
-        /*int newTempX = x_ + dx_;
-        int newTempY = y_ + dy_ + 12;
-        Point thisCell = new Point(
-                (mapW - (mapW - (x - (x % cellWidth))))/cellWidth,
-                (mapH - (mapH - (12 + y - (y % cellHeight))))/cellHeight);
-        Point cellAbove = new Point(thisCell.x, thisCell.y - 1);
-        Point cellLeft = new Point(thisCell.x - 1, thisCell.y);
-
-        int cellAboveY = 0;
-        int cellLeftX = 0;
-        int thisCellY = 0;
-        int thisCellX = 0;
-
-        switch (walls[thisCell.y][thisCell.x]) {
-            case 1:
-                thisCellX = wallCoords[thisCell.y][thisCell.x][1].x;
-                break;
-            case 2:
-                thisCellY = wallCoords[thisCell.y][thisCell.x][1].y;
-                break;
-            case 3:
-                thisCellX = wallCoords[thisCell.y][thisCell.x][1].x;
-                thisCellY = wallCoords[thisCell.y][thisCell.x][1].y;
-                break;
-        }
-
-        if (cellAbove.y >= 0) {
-            switch(walls[cellAbove.y][cellAbove.x]) {
-                case 2:
-                    cellAboveY = wallCoords[cellAbove.y][cellAbove.x][1].y;
-                    break;
-                case 3:
-                    cellAboveY = wallCoords[cellAbove.y][cellAbove.x][1].y;
-                    break;
-            }
-        }
-
-        if (cellLeft.x >= 0) {
-            switch(walls[cellLeft.y][cellLeft.x]) {
-                case 1:
-                    cellLeftX = wallCoords[cellLeft.y][cellLeft.x][1].x;
-                    break;
-                case 3:
-                    cellLeftX = wallCoords[cellLeft.y][cellLeft.x][1].x;
-                    break;
-            }
-        }
-
-        if (thisCellY != 0 && cellAboveY != 0) {
-            if (dy_ > 0) {
-                System.out.print(thisCellY + " ");
-                System.out.println(newTempY);
-                if (thisCellY < newTempY) {
-                    canMove[1] = false;
-                }
-            }
-            else if (dy_ < 0) {
-                System.out.println(thisCellY);
-                System.out.println(newTempY);
-                if (newTempY < cellAboveY) {
-                    canMove[1] = false;
-                }
-            }
-        }
-
-        if (thisCellX != 0 && cellLeftX != 0) {
-            if (dx_ > 0) {
-                if (thisCellX < newTempX) {
-                    canMove[0] = false;
-                }
-            }
-            else if (dx_ < 0) {
-                if (newTempX < cellLeftX) {
-                    canMove[0] = false;
-                }
-            }
         }*/
 
         return canMove;
+    }
+
+    public void checkWalls() {
+        /*boolean[] canMove = {
+                true, true
+        };
+
+        Point tl = new Point(x, y);
+        Point tr = new Point((x + w), y);
+        Point br = new Point((x + w), (y + h));
+        Point bl = new Point(x, (y + h));
+
+        Point tlCell = new Point(
+                (mapW - (mapW - (tl.x - (tl.x % cellWidth))))/cellWidth,
+                (mapH - (mapH - (tl.y - (tl.y % cellHeight))))/cellHeight
+        );
+        Point trCell = new Point(
+                (mapW - (mapW - (tr.x - (tr.x % cellWidth))))/cellWidth,
+                (mapH - (mapH - (tr.y - (tr.y % cellHeight))))/cellHeight
+        );
+        Point brCell = new Point(
+                (mapW - (mapW - (br.x - (br.x % cellWidth))))/cellWidth,
+                (mapH - (mapH - (br.y - (br.y % cellHeight))))/cellHeight
+        );
+        Point blCell = new Point(
+                (mapW - (mapW - (bl.x - (bl.x % cellWidth))))/cellWidth,
+                (mapH - (mapH - (bl.y - (bl.y % cellHeight))))/cellHeight
+        );
+
+        //Top side
+        if (!tlCell.equals(trCell)) {
+            if (walls[tlCell.y - 1][tlCell.x] == 1) {
+                Point dontIn = wallCoords[tlCell.y - 1][tlCell.x][1];
+                //Check if this point comes within the rectangle
+            }
+        }
+
+        //Right side
+        if (!trCell.equals(brCell)) {
+            if (walls[trCell.y][trCell.x + 1] == 2 || walls[trCell.y][trCell.x + 1] == 3) {
+
+            }
+        }*/
     }
 
     public void move() {
@@ -192,73 +184,19 @@ public class MoveRect {
 
         newX = x + dx;
         newY = y + dy;
-        /*
 
-        currCell.x = (mapW - (mapW - (x - (x % cellWidth))))/cellWidth;
-        currCell.y = (mapH - (mapH - (y - (y % cellHeight))))/cellHeight;
+        boolean[] cMoveUL = canMove(x, y, dx, dy);
+        boolean[] cMoveUR = canMove((x + w), y, dx, dy);
+        boolean[] cMoveBR = canMove((x + w), (y + h), dx, dy);
+        boolean[]cMoveBL = canMove(x, (y + h), dx, dy);
 
-        switch (walls[currCell.y][currCell.x]) {
-            case 1:
-                //can't pass through on right
-                passThrough[1] = false;
-                break;
-            case 2:
-                //can't pass through on bottom
-                passThrough[2] = false;
-                break;
-            case 3:
-                //can't pass through on right or bottom
-                passThrough[1] = false;
-                passThrough[2] = false;
-                break;
-        }
+        boolean canMoveX = cMoveUL[0] && cMoveUR[0] && cMoveBR[0] && cMoveBL[0];
+        boolean canMoveY = cMoveUL[1] && cMoveUR[1] && cMoveBR[1] && cMoveBL[1];
 
-        int upperWall = ((currCell.y - 1) >= 0) ? walls[currCell.y - 1][currCell.x] : 3;
-        int leftWall = ((currCell.x - 1) >= 0) ? walls[currCell.y][currCell.x - 1] : 3;
-        //Account for edge cases where currCell.x/y = 0, meaning it - 1 is negative
-        if (upperWall == 2 || upperWall == 3) {
-            //can't pass through on left;
-            passThrough[0] = false;
-        }
-
-        if (leftWall == 1 || leftWall == 3) {
-            //can't pass through on left;
-            passThrough[3] = false;
-        }
-
-        //System.out.println("Move X: " + (((mapW - (mapW - (newX - (newX % cellWidth))))/cellWidth) != currCell.x));
-        //System.out.println("Move Y: " + (((mapH - (mapH - ((y + dy) - ((y + dy) % cellHeight))))/cellHeight) != currCell.y));
-
-        int newXCell = ((mapW - (mapW - (newX - (newX % cellWidth))))/cellWidth);
-        int newYCell = ((mapH - (mapH - (newY - (newY % cellHeight))))/cellHeight);
-        if (
-                ((newXCell > currCell.x) && !passThrough[1])
-                || ((newXCell < currCell.x) && !passThrough[3])) {
-            noX = true;
-        }
-
-        if (
-                ((newYCell > currCell.y) && !passThrough[2])
-                || ((newYCell < currCell.y) && !passThrough[0])) {
-            noY = true;
-        }
-
-        //TEST CODE
-        if (newXCell != currCell.x) {
-            System.out.println("New Cell X: " + newXCell);
-            System.out.println(Arrays.toString(passThrough));
-        }
-        if (newYCell != currCell.y) {
-            System.out.println("New Cell Y: " + newYCell);
-            System.out.println(Arrays.toString(passThrough));
-        }*/
-
-        boolean[] cMove = canMove(x, y, dx, dy);
-
-        if ((newX > 1 && (newX + w + 2) < mapW) && cMove[0]) {
+        if ((newX > 1 && (newX + w + 2) < mapW) && canMoveX) {
             x += dx;
         }
-        if ((newY > 1 && (newY + h + 2) < mapH) && cMove[1]) {
+        if (((newY - h) > 1 && (newY + 2) < mapH) && canMoveY) {
             y += dy;
         }
 
